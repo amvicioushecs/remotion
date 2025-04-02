@@ -33,12 +33,12 @@ import {m3uState} from './m3u-state';
 import {makeMp3State} from './mp3';
 import {riffSpecificState} from './riff';
 import {sampleCallback} from './sample-callbacks';
+import {samplesObservedState} from './samples-observed/slow-duration-fps';
 import {seekInfiniteLoopDetectionState} from './seek-infinite-loop';
-import {slowDurationAndFpsState} from './slow-duration-fps';
 import {structureState} from './structure';
 import {timingsState} from './timings';
-import {transportStreamState} from './transport-stream';
-import {videoSectionState} from './video-section';
+import {transportStreamState} from './transport-stream/transport-stream';
+import {mediaSectionState} from './video-section';
 import {webmState} from './webm';
 export type InternalStats = {
 	skippedBytes: number;
@@ -71,6 +71,7 @@ export const makeParserState = ({
 	fieldsInReturnValue,
 	mimeType,
 	initialReaderInstance,
+	makeSamplesStartAtZero,
 }: {
 	hasAudioTrackHandlers: boolean;
 	hasVideoTrackHandlers: boolean;
@@ -92,6 +93,7 @@ export const makeParserState = ({
 	fieldsInReturnValue: Options<ParseMediaFields>;
 	mimeType: string | null;
 	initialReaderInstance: Reader;
+	makeSamplesStartAtZero: boolean;
 }) => {
 	let skippedBytes: number = 0;
 	const returnValue = {} as ParseMediaResult<AllParseMediaFields>;
@@ -108,7 +110,7 @@ export const makeParserState = ({
 	const structure = structureState();
 	const keyframes = keyframesState();
 	const emittedFields = emittedState();
-	const slowDurationAndFps = slowDurationAndFpsState();
+	const slowDurationAndFps = samplesObservedState();
 	const mp3Info = makeMp3State();
 	const images = imagesState();
 	const timings = timingsState();
@@ -177,7 +179,7 @@ export const makeParserState = ({
 		slowDurationAndFps,
 		contentLength,
 		images,
-		videoSection: videoSectionState(),
+		mediaSection: mediaSectionState(),
 		logLevel,
 		iterator,
 		controller,
@@ -197,6 +199,7 @@ export const makeParserState = ({
 		errored: errored as Error | null,
 		currentReader: currentReaderState,
 		seekInfiniteLoop,
+		makeSamplesStartAtZero,
 	};
 };
 

@@ -76,12 +76,10 @@ export const parseLoop = async ({
 			try {
 				await triggerInfoEmit(state);
 
-				const start = Date.now();
 				await state.controller._internals.checkForAbortAndPause();
 				const skip = await runParseIteration({
 					state,
 				});
-				state.timings.timeIterating += Date.now() - start;
 
 				if (skip !== null) {
 					state.increaseSkippedBytes(
@@ -100,7 +98,7 @@ export const parseLoop = async ({
 						seekTo: skip.skipTo,
 						userInitiated: false,
 						controller: state.controller,
-						videoSection: state.videoSection,
+						mediaSection: state.mediaSection,
 						iterator: state.iterator,
 						logLevel: state.logLevel,
 						mode: state.mode,
@@ -145,7 +143,6 @@ export const parseLoop = async ({
 			iterationWithThisOffset++;
 		} else {
 			iterationWithThisOffset = 0;
-			state.seekInfiniteLoop.reset();
 		}
 	}
 };

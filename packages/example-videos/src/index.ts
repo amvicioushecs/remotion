@@ -1,6 +1,12 @@
 import path from 'node:path';
 
 const examplePackage = path.join(__dirname, '..', '..', 'example');
+const musicVisualizationPackage = path.join(
+	__dirname,
+	'..',
+	'..',
+	'template-music-visualization',
+);
 const docsPackage = path.join(__dirname, '..', '..', 'docs');
 const lambdaPackage = path.join(__dirname, '..', '..', 'lambda');
 
@@ -56,6 +62,7 @@ export const exampleVideos = {
 	chirp: path.join(examplePackage, 'public', 'chirp.wav'),
 	iphonelivefoto: path.join(__dirname, '..', 'videos', 'mehmet.mov'),
 	transportstream: path.join(__dirname, '..', 'videos', '0.ts'),
+	h262: path.join(__dirname, '..', 'videos', 'h262.ts'),
 	gif: path.join(examplePackage, 'public', 'giphy.gif'),
 	png: path.join(docsPackage, 'static', 'img', 'logo.png'),
 	jpeg: path.join(docsPackage, 'static', 'img', 'freelancers', 'ray.jpeg'),
@@ -93,6 +100,11 @@ export const exampleVideos = {
 		'videos',
 		'local-playlist',
 		'output.m3u8',
+	),
+	mp3nomagicword: path.join(
+		musicVisualizationPackage,
+		'public',
+		'demo-track.mp3',
 	),
 };
 

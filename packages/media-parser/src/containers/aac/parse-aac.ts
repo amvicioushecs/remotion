@@ -8,7 +8,6 @@ import {emitAudioSample} from '../../emit-audio-sample';
 import type {ParseResult} from '../../parse-result';
 import {registerAudioTrack} from '../../register-track';
 import type {ParserState} from '../../state/parser-state';
-import {getWorkOnSeekRequestOptions} from '../../work-on-seek-request';
 
 export const parseAac = async (state: ParserState): Promise<ParseResult> => {
 	const {iterator} = state;
@@ -62,7 +61,6 @@ export const parseAac = async (state: ParserState): Promise<ParseResult> => {
 
 	if (state.callbacks.tracks.getTracks().length === 0) {
 		await registerAudioTrack({
-			workOnSeekRequestOptions: getWorkOnSeekRequestOptions(state),
 			container: 'aac',
 			track: {
 				codec: mapAudioObjectTypeToCodecString(audioObjectType),
@@ -91,21 +89,20 @@ export const parseAac = async (state: ParserState): Promise<ParseResult> => {
 	// One ADTS frame contains 1024 samples
 	await emitAudioSample({
 		trackId: 0,
-		audioSample: convertAudioOrVideoSampleToWebCodecsTimestamps(
-			{
+		audioSample: convertAudioOrVideoSampleToWebCodecsTimestamps({
+			sample: {
 				duration,
 				type: 'key',
 				data,
 				offset: startOffset,
-				timescale: 1_000_000,
+				timescale: 1000000,
 				trackId: 0,
 				cts: timestamp,
 				dts: timestamp,
 				timestamp,
 			},
-			1,
-		),
-		workOnSeekRequestOptions: getWorkOnSeekRequestOptions(state),
+			timescale: 1,
+		}),
 		callbacks: state.callbacks,
 	});
 

@@ -33,6 +33,7 @@ export const internalParseMedia: InternalParseMedia = async function <
 	selectM3uStream: selectM3uStreamFn,
 	selectM3uAssociatedPlaylists: selectM3uAssociatedPlaylistsFn,
 	mp4HeaderSegment,
+	makeSamplesStartAtZero,
 	...more
 }: InternalParseMediaOptions<F>) {
 	controller._internals.markAsReadyToEmitEvents();
@@ -44,7 +45,7 @@ export const internalParseMedia: InternalParseMedia = async function <
 
 	Log.verbose(
 		logLevel,
-		`Reading ${typeof src === 'string' ? src : src instanceof URL ? src.toString() : src.name}`,
+		`Reading ${typeof src === 'string' ? src : src instanceof URL ? src.toString() : src instanceof File ? src.name : src.toString()}`,
 	);
 
 	const {
@@ -92,6 +93,7 @@ export const internalParseMedia: InternalParseMedia = async function <
 		fieldsInReturnValue: _fieldsInReturnValue ?? {},
 		mimeType: contentType,
 		initialReaderInstance: readerInstance,
+		makeSamplesStartAtZero,
 	});
 
 	if (
